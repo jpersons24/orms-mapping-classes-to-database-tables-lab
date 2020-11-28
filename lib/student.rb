@@ -6,12 +6,16 @@ class Student
   attr_accessor :name, :grade
   attr_reader :id
 
+  # id=nil because id will be automatically assigned and incremented each time the instance is mapped to table row
   def initialize(name, grade, id=nil)
     @name = name
     @grade = grade
     @id = id
   end
 
+  # class method to create table within database ==> DB[:conn]
+  # set sql variable equal to SQL statement using a heredoc
+  # execute your SQL statement on the DB[:conn] using the execut method that is installed with the sqlite3 gem
   def self.create_table
 
     sql = <<-SQL
@@ -25,6 +29,8 @@ class Student
 
   end
 
+  # sets sql variable equal to a SQL statement
+  # run execute method on DB[:conn] passing sql variable as argument
   def self.drop_table
 
     sql = "DROP TABLE IF EXISTS students"
@@ -32,6 +38,10 @@ class Student
 
   end
 
+  # instance method that sets sql variable equal to SQL statemnt
+  # uses bound parameters to pass in Student instances name and grade attributes
+  # runs execute method on DB[:conn] passing sql variable, the instance's name attribute, the instances grade attribute
+  # sets @id variable equal to the key of the last row inserted to give @id value within the initialize method
   def save
 
     sql = <<-SQL
@@ -44,6 +54,9 @@ class Student
 
   end
 
+  # use keyowrd arguments of name:, grade:
+  # creates a Student instance using the keyword arguments
+  # save new Student instance using the .save method
   def self.create(name:, grade:)
 
     student = Student.new(name, grade)
